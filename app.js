@@ -57,33 +57,7 @@ function loadUsers(users) {
 }
 
 function loadCSVData() {
-    const users = [
-        { nombre: 'Ana', apellido: 'Rodríguez', correo: 'ana.rodriguez@ejemplo.com', whatsapp: '51935412787' },
-        { nombre: 'Carlos', apellido: 'Mendoza', correo: 'carlos.mendoza@ejemplo.com', whatsapp: '51912345678' },
-        { nombre: 'María', apellido: 'González', correo: 'maria.gonzalez@ejemplo.com', whatsapp: '51923456789' },
-        { nombre: 'Juan', apellido: 'Pérez', correo: 'juan.perez@ejemplo.com', whatsapp: '51934567890' },
-        { nombre: 'Laura', apellido: 'Sánchez', correo: 'laura.sanchez@ejemplo.com', whatsapp: '51945678901' },
-        { nombre: 'Diego', apellido: 'Torres', correo: 'diego.torres@ejemplo.com', whatsapp: '51956789012' },
-        { nombre: 'Carmen', apellido: 'López', correo: 'carmen.lopez@ejemplo.com', whatsapp: '51967890123' },
-        { nombre: 'Luis', apellido: 'Martínez', correo: 'luis.martinez@ejemplo.com', whatsapp: '51978901234' },
-        { nombre: 'Paula', apellido: 'Díaz', correo: 'paula.diaz@ejemplo.com', whatsapp: '51989012345' },
-        { nombre: 'Roberto', apellido: 'Castro', correo: 'roberto.castro@ejemplo.com', whatsapp: '51990123456' },
-        { nombre: 'Sofia', apellido: 'Vargas', correo: 'sofia.vargas@ejemplo.com', whatsapp: '51901234567' },
-        { nombre: 'Miguel', apellido: 'Herrera', correo: 'miguel.herrera@ejemplo.com', whatsapp: '51912345678' },
-        { nombre: 'Patricia', apellido: 'Flores', correo: 'patricia.flores@ejemplo.com', whatsapp: '51923456789' },
-        { nombre: 'Fernando', apellido: 'Ruiz', correo: 'fernando.ruiz@ejemplo.com', whatsapp: '51934567890' },
-        { nombre: 'Isabel', apellido: 'Silva', correo: 'isabel.silva@ejemplo.com', whatsapp: '51945678901' },
-        { nombre: 'Ricardo', apellido: 'Morales', correo: 'ricardo.morales@ejemplo.com', whatsapp: '51956789012' },
-        { nombre: 'Valeria', apellido: 'Ortiz', correo: 'valeria.ortiz@ejemplo.com', whatsapp: '51967890123' },
-        { nombre: 'Andrés', apellido: 'Navarro', correo: 'andres.navarro@ejemplo.com', whatsapp: '51978901234' },
-        { nombre: 'Lucía', apellido: 'Rojas', correo: 'lucia.rojas@ejemplo.com', whatsapp: '51989012345' },
-        { nombre: 'Gabriel', apellido: 'Romero', correo: 'gabriel.romero@ejemplo.com', whatsapp: '51990123456' },
-        { nombre: 'Elena', apellido: 'Jiménez', correo: 'elena.jimenez@ejemplo.com', whatsapp: '51901234567' },
-        { nombre: 'Daniel', apellido: 'Paredes', correo: 'daniel.paredes@ejemplo.com', whatsapp: '51912345678' },
-        { nombre: 'Mónica', apellido: 'Cruz', correo: 'monica.cruz@ejemplo.com', whatsapp: '51923456789' },
-        { nombre: 'Jorge', apellido: 'Reyes', correo: 'jorge.reyes@ejemplo.com', whatsapp: '51934567890' },
-        { nombre: 'Claudia', apellido: 'Moreno', correo: 'claudia.moreno@ejemplo.com', whatsapp: '51945678901' }
-    ];
+    
     loadUsers(users);
 }
 
