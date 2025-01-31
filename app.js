@@ -1,10 +1,10 @@
-// Manejo de carga de CSV
-
 document.addEventListener('DOMContentLoaded', () => {
     loadCSVData();
+    loadMessages();
+    document.getElementById('csvFileInput').addEventListener('change', handleFileSelect, false);
+    document.getElementById('darkModeToggle').addEventListener('click', toggleDarkMode);
+    applySavedTheme();
 });
-
-document.getElementById('csvFileInput').addEventListener('change', handleFileSelect, false);
 
 function handleFileSelect(event) {
     const file = event.target.files[0];
@@ -13,6 +13,7 @@ function handleFileSelect(event) {
         reader.onload = function(e) {
             const content = e.target.result;
             const users = parseCSV(content);
+            saveUsersToLocalStorage(users);
             loadUsers(users);
         };
         reader.readAsText(file);
@@ -31,7 +32,8 @@ function parseCSV(csvText) {
                 nombre: cols[0],
                 apellido: cols[1],
                 correo: cols[2] || '',
-                whatsapp: cols[3] || ''
+                whatsapp: cols[3] || '',
+                estado: 'inicio' // Estado inicial
             });
         }
     });
@@ -49,38 +51,124 @@ function loadUsers(users) {
             <td>${user.apellido}</td>
             <td>${user.correo}</td>
             <td>${user.whatsapp}</td>
-            <td><button class="btn btn-primary" onclick="openWhatsapp('${user.whatsapp}')">Enviar Mensaje</button></td>
-            <td><button class="btn btn-secondary" onclick='showTags(${JSON.stringify(user)})'>Etiquetar</button></td>
+            <td><span class="estado ${user.estado.replace(' ', '-')}"></span></td>
+            <td><button class="btn btn-primary" onclick="showMessageOptions('${user.whatsapp}')">Enviar Mensaje</button></td>
+            <td><button class="btn btn-secondary" onclick='showTags("${user.whatsapp}")'>Etiquetar</button></td>
         `;
         tableBody.appendChild(row);
     });
 }
 
 function loadCSVData() {
-    
-    loadUsers(users);
+    const users = getUsersFromLocalStorage();
+    if (users) {
+        loadUsers(users);
+    }
 }
 
-// Abrir WhatsApp con mensaje predeterminado
-function openWhatsapp(whatsapp) {
-    const mensaje = 'Hola gracias por tu interes en Repensar. Somos los mejores formando diseñadores web, a continuacion te enviamos nuestro cronograma e informacion completa del curso'; // Puedes personalizar el mensaje.
-    const url = `https://wa.me/${whatsapp}?text=${encodeURIComponent(mensaje)}`;
-    window.open(url, '_blank');
+function deleteCSVData() {
+    if (confirm('¿Estás seguro de que deseas eliminar todos los datos del CSV?')) {
+        localStorage.removeItem('users');
+        const tableBody = document.querySelector('#usersTable tbody');
+        tableBody.innerHTML = '';
+        alert('Datos eliminados correctamente');
+    }
 }
 
-// Mostrar Modal para etiquetar usuario
-function showTags(user) {
+function showMessageOptions(whatsapp) {
     const templateModal = new bootstrap.Modal(document.getElementById('templateModal'));
     const templateList = document.getElementById('templateList');
+    const messages = getMessagesFromLocalStorage();
     templateList.innerHTML = `
-        <button class="btn btn-success" onclick="applyTag('Bienvenida', '${user.whatsapp}')">Bienvenida</button>
-        <button class="btn btn-warning" onclick="applyTag('Seguimiento', '${user.whatsapp}')">Seguimiento</button>
-        <button class="btn btn-danger" onclick="applyTag('Cierre', '${user.whatsapp}')">Cierre</button>
+        <button class="btn btn-success" onclick="sendMessage('${whatsapp}', '${messages.welcome}')">Bienvenida</button>
+        <button class="btn btn-warning" style="background-color: var(--color-accent);" onclick="sendMessage('${whatsapp}', '${messages.followUp}')">Seguimiento</button>
+        <button class="btn btn-danger" onclick="sendMessage('${whatsapp}', '${messages.closing}')">Cierre</button>
     `;
     templateModal.show();
 }
 
-// Aplicar una etiqueta a un usuario
+function sendMessage(whatsapp, message) {
+    const url = `https://wa.me/${whatsapp}?text=${encodeURIComponent(message)}`;
+    window.open(url, '_blank');
+}
+
+function showTags(whatsapp) {
+    const templateModal = new bootstrap.Modal(document.getElementById('templateModal'));
+    const templateList = document.getElementById('templateList');
+    templateList.innerHTML = `
+        <button class="btn btn-success" onclick="applyTag('inicio', '${whatsapp}')">Inicio</button>
+        <button class="btn btn-warning" style="background-color: var(--color-accent);" onclick="applyTag('esperando-respuesta', '${whatsapp}')">Esperando Respuesta</button>
+        <button class="btn btn-danger" onclick="applyTag('finalizado', '${whatsapp}')">Finalizado</button>
+    `;
+    templateModal.show();
+}
+
 function applyTag(tag, whatsapp) {
-    alert(`Etiqueta '${tag}' aplicada al usuario con WhatsApp ${whatsapp}`);
+    const users = getUsersFromLocalStorage();
+    const userIndex = users.findIndex(u => u.whatsapp === whatsapp);
+    if (userIndex !== -1) {
+        users[userIndex].estado = tag; // Actualiza el estado del usuario
+        saveUsersToLocalStorage(users);
+        updateUserRow(users[userIndex]); // Actualiza la fila del usuario en la tabla
+    }
+}
+
+function updateUserRow(user) {
+    const rows = document.querySelectorAll('#usersTable tbody tr');
+    rows.forEach(row => {
+        const whatsappCell = row.cells[3];
+        if (whatsappCell.textContent === user.whatsapp) {
+            const estadoCell = row.cells[4].querySelector('.estado');
+            estadoCell.className = `estado ${user.estado.replace(' ', '-')}`;
+        }
+    });
+}
+
+function saveMessages() {
+    const welcomeMessage = document.getElementById('welcomeMessage').value;
+    const followUpMessage = document.getElementById('followUpMessage').value;
+    const closingMessage = document.getElementById('closingMessage').value;
+    const messages = {
+        welcome: welcomeMessage,
+        followUp: followUpMessage,
+        closing: closingMessage
+    };
+    localStorage.setItem('messages', JSON.stringify(messages));
+    alert('Mensajes guardados correctamente');
+}
+
+function loadMessages() {
+    const messages = getMessagesFromLocalStorage();
+    if (messages) {
+        document.getElementById('welcomeMessage').value = messages.welcome;
+        document.getElementById('followUpMessage').value = messages.followUp;
+        document.getElementById('closingMessage').value = messages.closing;
+    }
+}
+
+function getMessagesFromLocalStorage() {
+    const messages = localStorage.getItem('messages');
+    return messages ? JSON.parse(messages) : { welcome: '', followUp: '', closing: '' };
+}
+
+function saveUsersToLocalStorage(users) {
+    localStorage.setItem('users', JSON.stringify(users));
+}
+
+function getUsersFromLocalStorage() {
+    const users = localStorage.getItem('users');
+    return users ? JSON.parse(users) : null;
+}
+
+function toggleDarkMode() {
+    document.body.classList.toggle('dark-mode');
+    const isDarkMode = document.body.classList.contains('dark-mode');
+    localStorage.setItem('darkMode', isDarkMode);
+}
+
+function applySavedTheme() {
+    const isDarkMode = JSON.parse(localStorage.getItem('darkMode'));
+    if (isDarkMode) {
+        document.body.classList.add('dark-mode');
+    }
 }

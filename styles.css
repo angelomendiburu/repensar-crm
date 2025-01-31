@@ -1,21 +1,304 @@
-body {
-    background-color: #f8f9fa;
+:root {
+    /* Paleta principal (633 likes) */
+    --color-light: #F5F2EA;
+    --color-primary: #00A19D;
+    --color-secondary: #0C7B93;
+    --color-dark: #05445E;
+    
+    /* Paleta secundaria (551 likes) */
+    --color-accent-light: #C6EDD5;
+    --color-accent: #B5927B;
+    --color-accent-dark: #0F2C33;
 }
 
-table th, table td {
+/* Estilos base */
+body {
+    background-color: var(--color-light);
+    color: var(--color-dark);
+    transition: background-color 0.3s, color 0.3s;
+}
+
+/* Reset de botón */
+button {
+    border: none;
+    background: none;
+    padding: 0;
+    margin: 0;
+    cursor: pointer;
+    font-family: inherit;
+}
+
+/* Estilos para la tabla */
+.table {
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.table th {
+    background-color: var(--color-primary);
+    color: white;
+    border: none;
     text-align: center;
 }
 
+.table td {
+    border-color: var(--color-light);
+    text-align: center;
+}
+
+/* Estilos para los controles CSV */
+.csv-controls {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+}
+
+.csv-input-wrapper {
+    flex: 1;
+}
+
+.delete-btn {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 1rem;
+    background-color: #000000;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    transition: background-color 0.3s;
+}
+
+.delete-btn:hover {
+    background-color: #ff6b81;
+}
+
+/* Estilos para formularios */
+.form-control {
+    border-color: var(--color-secondary);
+    border-radius: 6px;
+}
+
+.form-control:focus {
+    border-color: var(--color-primary);
+    box-shadow: 0 0 0 0.2rem rgba(0, 161, 157, 0.25);
+}
+
+/* Estilos para botones */
+.btn-primary {
+    background-color: var(--color-primary);
+    border-color: var(--color-primary);
+}
+
+.btn-primary:hover {
+    background-color: var(--color-secondary);
+    border-color: var(--color-secondary);
+}
+
+/* Estados de usuarios */
+.estado {
+    display: inline-block;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+}
+
+.estado.inicio {
+    background-color: var(--color-primary); /* #00A19D */
+}
+
+.estado.esperando-respuesta {
+    background-color: var(--color-accent); /* #B5927B */
+}
+
+.estado.finalizado {
+    background-color: #ff4757;
+}
+
+/* Botón de tema */
+.theme__icon {
+    width: 32px;
+    height: 32px;
+    padding: 4px;
+    border-radius: 10px;
+    background-color: #5856d6;
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    overflow: hidden;
+}
+
+.theme__icon > :nth-child(1) {
+    width: 16px;
+    height: 16px;
+    border-radius: 24px;
+    border: 3px solid #5856d6;
+    background-color: rgb(28, 28, 30);
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    transition: width .4s, height .4s, border .4s, background-color .4s;
+    z-index: 10;
+}
+
+.theme__icon:hover > :nth-child(1) {
+    width: 20px;
+    height: 20px;
+    border: 1px solid rgb(245, 245, 247);
+    background-color: rgb(245, 245, 247);
+}
+
+.theme__icon > :nth-child(3) {
+    width: 4px;
+    height: 4px;
+    border-radius: 9px;
+    background-color: #5856d6;
+    position: absolute;
+    top: 2px;
+    right: 2px;
+    transition: width .6s, height .6s;
+    transition-delay: .08s;
+    z-index: 10;
+}
+
+.theme__icon:hover > :nth-child(3) {
+    width: 18px;
+    height: 18px;
+}
+
+.theme__icon > :nth-child(2) {
+    width: 24px;
+    height: 24px;
+    border-radius: 24px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    transition: transform .4s;
+}
+
+.theme__icon:hover > :nth-child(2) {
+    transform: translate(-50%, -50%) rotate(-45deg) scale(.8);
+}
+
+.theme__icon > :nth-child(2) span {
+    display: block;
+    width: 24px;
+    height: 2px;
+    border-radius: 2px;
+    background-color: rgb(28, 28, 30);
+    position: relative;
+}
+
+.theme__icon > :nth-child(2) > :nth-child(1) {
+    top: calc(50% - 1px);
+}
+
+.theme__icon > :nth-child(2) > :nth-child(2) {
+    top: calc(50% - 3px);
+    transform: rotate(90deg);
+}
+
+.theme__icon > :nth-child(2) > :nth-child(3) {
+    top: calc(50% - 5px);
+    transform: rotate(45deg);
+}
+
+.theme__icon > :nth-child(2) > :nth-child(4) {
+    top: calc(50% - 7px);
+    transform: rotate(-45deg);
+}
+
+/* Modo oscuro */
+body.dark-mode {
+    background-color: var(--color-accent-dark);
+    color: var(--color-light);
+}
+
+body.dark-mode .table {
+    background-color: var(--color-dark);
+    color: var(--color-light);
+}
+
+body.dark-mode .table th {
+    background-color: var(--color-secondary);
+}
+
+body.dark-mode .table td {
+    border-color: var(--color-accent-dark);
+    color: var(--color-light);
+}
+
+body.dark-mode .form-control {
+    background-color: var(--color-dark);
+    border-color: var(--color-secondary);
+    color: var(--color-light);
+}
+
+body.dark-mode .btn-primary {
+    background-color: var(--color-secondary);
+    border-color: var(--color-secondary);
+}
+
+body.dark-mode .theme__icon {
+    background-color: #121212;
+}
+
+body.dark-mode .theme__icon > :nth-child(1) {
+    border-color: #121212;
+    background-color: rgb(245, 245, 247);
+}
+
+body.dark-mode .theme__icon > :nth-child(2) span {
+    background-color: rgb(245, 245, 247);
+}
+
+body.dark-mode .theme__icon > :nth-child(3) {
+    background-color: #121212;
+}
+
+/* Estilos para los mensajes con desvanecimiento */
+textarea {
+    position: relative;
+    font-family: inherit;
+}
+
+textarea::placeholder {
+    opacity: 0.5;
+    transition: opacity 0.3s ease;
+}
+
+textarea:focus::placeholder,
+textarea:not(:placeholder-shown)::placeholder {
+    opacity: 0;
+}
+
+/* Media queries para responsividad */
 @media (max-width: 768px) {
     h1 {
         font-size: 1.5rem;
     }
-
+    
     .table-responsive {
         overflow-x: auto;
     }
-
+    
     table th, table td {
         white-space: nowrap;
+    }
+    
+    .csv-controls {
+        flex-direction: column;
+    }
+    
+    .csv-input-wrapper {
+        width: 100%;
+    }
+    
+    .delete-btn {
+        width: 100%;
+        justify-content: center;
     }
 }
