@@ -1,10 +1,18 @@
 document.addEventListener('DOMContentLoaded', () => {
     loadCSVData();
-    loadMessages();
     document.getElementById('csvFileInput').addEventListener('change', handleFileSelect, false);
     document.getElementById('darkModeToggle').addEventListener('click', toggleDarkMode);
     applySavedTheme();
+    setupNavigation();
 });
+
+// Funciones de inicialización
+function loadCSVData() {
+    const users = getUsersFromLocalStorage();
+    if (users) {
+        loadUsers(users);
+    }
+}
 
 function handleFileSelect(event) {
     const file = event.target.files[0];
@@ -15,6 +23,7 @@ function handleFileSelect(event) {
             const users = parseCSV(content);
             saveUsersToLocalStorage(users);
             loadUsers(users);
+            event.target.value = ''; // Reset the file input value
         };
         reader.readAsText(file);
     } else {
@@ -33,7 +42,7 @@ function parseCSV(csvText) {
                 apellido: cols[1],
                 correo: cols[2] || '',
                 whatsapp: cols[3] || '',
-                estado: 'inicio' // Estado inicial
+                estado: 'inicio'
             });
         }
     });
@@ -42,8 +51,9 @@ function parseCSV(csvText) {
 
 function loadUsers(users) {
     const tableBody = document.querySelector('#usersTable tbody');
-    tableBody.innerHTML = ''; // Limpiar la tabla
-
+    if (!tableBody) return;
+    
+    tableBody.innerHTML = '';
     users.forEach(user => {
         const row = document.createElement('tr');
         row.innerHTML = `
@@ -59,13 +69,6 @@ function loadUsers(users) {
     });
 }
 
-function loadCSVData() {
-    const users = getUsersFromLocalStorage();
-    if (users) {
-        loadUsers(users);
-    }
-}
-
 function deleteCSVData() {
     if (confirm('¿Estás seguro de que deseas eliminar todos los datos del CSV?')) {
         localStorage.removeItem('users');
@@ -73,55 +76,6 @@ function deleteCSVData() {
         tableBody.innerHTML = '';
         alert('Datos eliminados correctamente');
     }
-}
-
-function showMessageOptions(whatsapp) {
-    const templateModal = new bootstrap.Modal(document.getElementById('templateModal'));
-    const templateList = document.getElementById('templateList');
-    const messages = getMessagesFromLocalStorage();
-    templateList.innerHTML = `
-        <button class="btn btn-success" onclick="sendMessage('${whatsapp}', '${messages.welcome}')">Bienvenida</button>
-        <button class="btn btn-warning" style="background-color: var(--color-accent);" onclick="sendMessage('${whatsapp}', '${messages.followUp}')">Seguimiento</button>
-        <button class="btn btn-danger" onclick="sendMessage('${whatsapp}', '${messages.closing}')">Cierre</button>
-    `;
-    templateModal.show();
-}
-
-function sendMessage(whatsapp, message) {
-    const url = `https://wa.me/${whatsapp}?text=${encodeURIComponent(message)}`;
-    window.open(url, '_blank');
-}
-
-function showTags(whatsapp) {
-    const templateModal = new bootstrap.Modal(document.getElementById('templateModal'));
-    const templateList = document.getElementById('templateList');
-    templateList.innerHTML = `
-        <button class="btn btn-success" onclick="applyTag('inicio', '${whatsapp}')">Inicio</button>
-        <button class="btn btn-warning" style="background-color: var(--color-accent);" onclick="applyTag('esperando-respuesta', '${whatsapp}')">Esperando Respuesta</button>
-        <button class="btn btn-danger" onclick="applyTag('finalizado', '${whatsapp}')">Finalizado</button>
-    `;
-    templateModal.show();
-}
-
-function applyTag(tag, whatsapp) {
-    const users = getUsersFromLocalStorage();
-    const userIndex = users.findIndex(u => u.whatsapp === whatsapp);
-    if (userIndex !== -1) {
-        users[userIndex].estado = tag; // Actualiza el estado del usuario
-        saveUsersToLocalStorage(users);
-        updateUserRow(users[userIndex]); // Actualiza la fila del usuario en la tabla
-    }
-}
-
-function updateUserRow(user) {
-    const rows = document.querySelectorAll('#usersTable tbody tr');
-    rows.forEach(row => {
-        const whatsappCell = row.cells[3];
-        if (whatsappCell.textContent === user.whatsapp) {
-            const estadoCell = row.cells[4].querySelector('.estado');
-            estadoCell.className = `estado ${user.estado.replace(' ', '-')}`;
-        }
-    });
 }
 
 function saveMessages() {
@@ -133,7 +87,7 @@ function saveMessages() {
         followUp: followUpMessage,
         closing: closingMessage
     };
-    localStorage.setItem('messages', JSON.stringify(messages));
+    saveMessagesToLocalStorage(messages);
     alert('Mensajes guardados correctamente');
 }
 
@@ -146,29 +100,49 @@ function loadMessages() {
     }
 }
 
-function getMessagesFromLocalStorage() {
-    const messages = localStorage.getItem('messages');
-    return messages ? JSON.parse(messages) : { welcome: '', followUp: '', closing: '' };
-}
-
-function saveUsersToLocalStorage(users) {
-    localStorage.setItem('users', JSON.stringify(users));
-}
-
-function getUsersFromLocalStorage() {
-    const users = localStorage.getItem('users');
-    return users ? JSON.parse(users) : null;
-}
-
-function toggleDarkMode() {
-    document.body.classList.toggle('dark-mode');
-    const isDarkMode = document.body.classList.contains('dark-mode');
-    localStorage.setItem('darkMode', isDarkMode);
-}
-
-function applySavedTheme() {
-    const isDarkMode = JSON.parse(localStorage.getItem('darkMode'));
-    if (isDarkMode) {
-        document.body.classList.add('dark-mode');
+function updateDashboard() {
+    const users = getUsersFromLocalStorage() || [];
+    const registros = getRegistrosFromStorage() || [];
+    
+    if (document.getElementById('totalUsuarios')) {
+        document.getElementById('totalUsuarios').textContent = users.length;
     }
+    if (document.getElementById('totalMensajes')) {
+        document.getElementById('totalMensajes').textContent = registros.length;
+    }
+    if (document.getElementById('usuariosActivos')) {
+        const activos = users.filter(user => user.estado === 'esperando-respuesta').length;
+        document.getElementById('usuariosActivos').textContent = activos;
+    }
+}
+
+function guardarNuevaPlantilla() {
+    const nombre = document.getElementById('nombrePlantilla').value;
+    const mensaje = document.getElementById('mensajePlantilla').value;
+    if (nombre && mensaje) {
+        const plantillas = getPlantillasFromStorage();
+        plantillas.push({ nombre, mensaje });
+        savePlantillasToStorage(plantillas);
+        loadPlantillas();
+        const nuevaPlantillaModal = new bootstrap.Modal(document.getElementById('nuevaPlantillaModal'));
+        nuevaPlantillaModal.hide();
+    }
+}
+
+function loadPlantillas() {
+    const plantillas = getPlantillasFromStorage();
+    const tableBody = document.getElementById('plantillasTableBody');
+    if (!tableBody) return;
+    tableBody.innerHTML = '';
+    plantillas.forEach(plantilla => {
+        const row = document.createElement('tr');
+        row.innerHTML = `
+            <td>${plantilla.nombre}</td>
+            <td>${plantilla.mensaje}</td>
+            <td>
+                <button class="btn btn-warning btn-sm" data-bs-toggle="modal" data-bs-target="#editarPlantillaModal" onclick="cargarDatosEditarPlantilla('${plantilla.nombre}')">Editar</button>
+            </td>
+        `;
+        tableBody.appendChild(row);
+    });
 }
