@@ -19,3 +19,5 @@ function getThemeFromLocalStorage() {
     return JSON.parse(localStorage.getItem('darkMode'));
 }
 
+// Export functions if using modules
+// export { toggleDarkMode, applySavedTheme };

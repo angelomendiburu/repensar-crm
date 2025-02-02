@@ -1,11 +1,10 @@
-// storage.js
 function saveUsersToLocalStorage(users) {
     localStorage.setItem('users', JSON.stringify(users));
 }
 
 function getUsersFromLocalStorage() {
     const users = localStorage.getItem('users');
-    return users ? JSON.parse(users) : []; // Devuelve un array vacío si no hay usuarios
+    return users ? JSON.parse(users) : [];
 }
 
 function getMessagesFromLocalStorage() {
@@ -40,3 +39,6 @@ function saveThemeToLocalStorage(isDarkMode) {
 function getThemeFromLocalStorage() {
     return JSON.parse(localStorage.getItem('darkMode'));
 }
+
+// Export functions if using modules
+// export { saveUsersToLocalStorage, getUsersFromLocalStorage, getMessagesFromLocalStorage, saveMessagesToLocalStorage, getPlantillasFromStorage, savePlantillasToStorage, getRegistrosFromStorage, saveRegistrosToStorage, saveThemeToLocalStorage, getThemeFromLocalStorage };

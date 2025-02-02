@@ -46,3 +46,6 @@ function updateUserRow(user) {
         }
     });
 }
+
+// Export functions if using modules
+// export { showMessageOptions, showTags, applyTag, updateUserRow };

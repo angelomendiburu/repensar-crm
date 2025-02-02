@@ -1,10 +1,14 @@
 document.addEventListener('DOMContentLoaded', () => {
     loadCSVData();
-    document.getElementById('csvFileInput').addEventListener('change', handleFileSelect, false);
-    document.getElementById('darkModeToggle').addEventListener('click', toggleDarkMode);
+    setupEventListeners();
     applySavedTheme();
     setupNavigation();
 });
+
+function setupEventListeners() {
+    document.getElementById('csvFileInput').addEventListener('change', handleFileSelect, false);
+    document.getElementById('darkModeToggle').addEventListener('click', toggleDarkMode);
+}
 
 // Funciones de inicialización
 function loadCSVData() {

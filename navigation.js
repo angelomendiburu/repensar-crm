@@ -13,6 +13,7 @@ function setupNavigation() {
                 case 'usuarios':
                     mainContainer.innerHTML = usuariosContent;
                     loadCSVData();
+                    setupEventListeners();
                     break;
                 case 'plantillas':
                     mainContainer.innerHTML = `
@@ -39,6 +40,7 @@ function setupNavigation() {
                         </div>
                     `;
                     loadMessages();
+                    setupEventListeners();
                     break;
                 case 'registros':
                     mainContainer.innerHTML = `
@@ -62,6 +64,7 @@ function setupNavigation() {
                         </div>
                     `;
                     loadRegistros();
+                    setupEventListeners();
                     break;
                 case 'dashboard':
                     mainContainer.innerHTML = `
@@ -94,6 +97,7 @@ function setupNavigation() {
                         </div>
                     `;
                     updateDashboard();
+                    setupEventListeners();
                     break;
             }
         });
