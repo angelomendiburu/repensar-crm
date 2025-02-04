@@ -3,6 +3,7 @@ document.addEventListener('DOMContentLoaded', () => {
     setupEventListeners();
     applySavedTheme();
     setupNavigation();
+    loadPlantillas(); // Cargar plantillas al inicializar la página
 });
 
 function setupEventListeners() {
@@ -57,9 +58,9 @@ function parseCSV(csvText) {
         if (cols.length >= headers.length) {
             let userObj = {};
             headers.forEach((header, index) => {
-                userObj[header] = cols[index] || ''; // Asigna valores a las claves
+                userObj[header] = cols[index] || '';
             });
-            userObj.estado = 'inicio'; // Agregar estado por defecto
+            userObj.estado = 'inicio';
             users.push(userObj);
         }
     });
@@ -80,7 +81,12 @@ function loadUsers(users) {
 
     users.forEach(user => {
         const row = document.createElement('tr');
-        row.innerHTML = headers.map(header => `<td>${user[header]}</td>`).join('') + `
+        row.innerHTML = headers.map(header => {
+            if (header === 'estado') {
+                return `<td><span class="estado-dot ${user[header] || 'inicio'}" title="${user[header] || 'inicio'}"></span></td>`;
+            }
+            return `<td>${user[header]}</td>`;
+        }).join('') + `
             <td>
                 <button class="btn btn-primary enviar-mensaje" data-whatsapp="${user.whatsapp || ''}">Enviar Mensaje</button>
                 <button class="btn btn-secondary etiquetar" data-whatsapp="${user.whatsapp || ''}">Etiquetar</button>
@@ -89,18 +95,6 @@ function loadUsers(users) {
         tableBody.appendChild(row);
     });
 }
-
-// Delegación de eventos para botones generados dinámicamente
-document.querySelector('#usersTable tbody').addEventListener('click', function(event) {
-    if (event.target.classList.contains('enviar-mensaje')) {
-        const whatsapp = event.target.dataset.whatsapp;
-        if (whatsapp) showMessageOptions(whatsapp);
-    }
-    if (event.target.classList.contains('etiquetar')) {
-        const whatsapp = event.target.dataset.whatsapp;
-        if (whatsapp) showTags(whatsapp);
-    }
-});
 
 function deleteCSVData() {
     if (confirm('¿Estás seguro de que deseas eliminar todos los datos del CSV?')) {
@@ -181,9 +175,32 @@ function loadPlantillas() {
 }
 
 // Delegación de eventos para edición de plantillas
-document.getElementById('plantillasTableBody').addEventListener('click', function(event) {
+document.getElementById('plantillasTableBody')?.addEventListener('click', function(event) {
     if (event.target.classList.contains('editar-plantilla')) {
         const nombre = event.target.dataset.nombre;
         cargarDatosEditarPlantilla(nombre);
     }
 });
+
+// Delegación de eventos para botones generados dinámicamente
+document.querySelector('#usersTable tbody')?.addEventListener('click', function(event) {
+    if (event.target.classList.contains('enviar-mensaje')) {
+        const whatsapp = event.target.dataset.whatsapp;
+        if (whatsapp) showMessageOptions(whatsapp);
+    }
+    if (event.target.classList.contains('etiquetar')) {
+        const whatsapp = event.target.dataset.whatsapp;
+        if (whatsapp) showTags(whatsapp);
+    }
+});
+
+function updateUserRow(user) {
+    const rows = document.querySelectorAll('#usersTable tbody tr');
+    rows.forEach(row => {
+        const whatsappCell = row.cells[3];
+        if (whatsappCell.textContent === user.whatsapp) {
+            const estadoCell = row.cells[4].querySelector('.estado-dot');
+            estadoCell.className = `estado-dot ${user.estado}`;
+        }
+    });
+}

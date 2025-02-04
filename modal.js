@@ -33,6 +33,7 @@ function applyTag(tag, whatsapp) {
         saveUsersToLocalStorage(users);
         updateUserRow(users[userIndex]);
         updateDashboard();
+        loadStatsChart(); // Actualizar el gráfico después de aplicar la etiqueta
     }
 }
 
@@ -47,5 +48,10 @@ function updateUserRow(user) {
     });
 }
 
+function sendMessage(whatsapp, message) {
+    const url = `https://api.whatsapp.com/send?phone=${whatsapp}&text=${encodeURIComponent(message)}`;
+    window.open(url, '_blank');
+}
+
 // Export functions if using modules
-// export { showMessageOptions, showTags, applyTag, updateUserRow };
+// export { showMessageOptions, showTags, applyTag, updateUserRow, sendMessage };
