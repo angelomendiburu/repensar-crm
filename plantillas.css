@@ -25,7 +25,7 @@ body.dark-mode {
  }
 
 body.dark-mode .container {
-    background-color: #444;
+    background-color: #0F2C33;
     color: #f5f5f5;
 }
 
@@ -39,7 +39,7 @@ h1 {
 }
 
 body.dark-mode h1 {
-    background-color: #535353;
+    background-color: #0C7B93;
     color: #f5f5f5;
     padding: 1rem;
     border-radius: 8px;
@@ -90,7 +90,7 @@ body.dark-mode .templates-table {
 }
 
 body.dark-mode .table-header {
-    background-color: #666;
+    background-color: #0C7B93;
     color: white;
 }
 
@@ -107,12 +107,12 @@ body.dark-mode .table-header {
 }
 
 body.dark-mode .template-row {
-    background-color: #555;
+    background-color: #05445E;
     color: #f5f5f5;
 }
 
 body.dark-mode .template-row:nth-child(even) {
-    background-color: #666;
+    background-color: #05384e;
 }
 
 .template-row:last-child {
