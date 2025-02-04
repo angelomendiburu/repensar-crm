@@ -260,3 +260,62 @@ body.dark-mode .btn-cancel {
 .btn-save:hover, .btn-cancel:hover {
     opacity: 0.8;
 }
+
+/* Media queries for mobile devices */
+@media (max-width: 768px) {
+    .container {
+        padding: 1rem; /* Reduce padding for mobile */
+    }
+
+    h1 {
+        font-size: 1.5rem; /* Smaller font size for mobile */
+        padding: 0.5rem; /* Reduce padding for mobile */
+    }
+
+    .create-btn {
+        width: 100%; /* Full width button for mobile */
+        padding: 0.5rem; /* Reduce padding for mobile */
+    }
+
+    .templates-table {
+        overflow-x: auto; /* Enable horizontal scrolling for tables */
+    }
+
+    .table-header, .template-row {
+        display: block; /* Stack table rows for mobile */
+        padding: 0.5rem; /* Reduce padding for mobile */
+    }
+
+    .header-cell, .actions {
+        display: block; /* Stack cells for mobile */
+        margin-bottom: 0.5rem; /* Add spacing between cells */
+    }
+
+    .actions {
+        text-align: center; /* Center align actions */
+    }
+
+    .btn-edit, .btn-delete {
+        width: 100%; /* Full width buttons for mobile */
+        margin-bottom: 0.5rem; /* Add spacing between buttons */
+    }
+
+    .modal-content {
+        width: 95%; /* Increase modal width for mobile */
+        padding: 1rem; /* Reduce padding for mobile */
+    }
+
+    .form-group {
+        margin-bottom: 1rem; /* Reduce margin for mobile */
+    }
+
+    .modal-buttons {
+        flex-direction: column; /* Stack buttons for mobile */
+        gap: 0.5rem; /* Reduce gap between buttons */
+    }
+
+    .btn-save, .btn-cancel {
+        width: 100%; /* Full width buttons for mobile */
+        padding: 0.5rem; /* Reduce padding for mobile */
+    }
+}
