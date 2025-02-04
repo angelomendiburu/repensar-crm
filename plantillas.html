@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Gestión de Plantillas</title>
+    <link rel="stylesheet" href="plantillas.css">
+</head>
+<body>
+    <div class="container">
+        <h1>PLANTILLAS</h1>
+        
+        <button id="createTemplateBtn" class="create-btn">Crear Plantilla</button>
+        
+        <div class="templates-table">
+            <div class="table-header">
+                <div class="header-cell">Nombre de la plantilla</div>
+                <div class="header-cell">Mensaje predefinido</div>
+                <div class="header-cell">Acciones</div>
+            </div>
+            <div id="templatesList"></div>
+        </div>
+    </div>
+
+    <!-- Modal para crear/editar plantilla -->
+    <div id="templateModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Crear Plantilla</h2>
+            <form id="templateForm">
+                <div class="form-group">
+                    <input type="text" id="templateName" placeholder="Nombre de la plantilla" required>
+                </div>
+                <div class="form-group">
+                    <textarea id="templateMessage" placeholder="Mensaje predefinido" required></textarea>
+                </div>
+                <div class="modal-buttons">
+                    <button type="button" class="btn-cancel">Cerrar</button>
+                    <button type="submit" class="btn-save">Guardar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="plantillas.js"></script>
+    <script>
+        window.addEventListener('message', (event) => {
+            if (event.data.darkMode !== undefined) {
+                if (event.data.darkMode) {
+                    document.body.classList.add('dark-mode');
+                } else {
+                    document.body.classList.remove('dark-mode');
+                }
+            }
+        });
+    </script>
+</body>
+</html>

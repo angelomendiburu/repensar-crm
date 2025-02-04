@@ -65,42 +65,7 @@
         </div>
 
         <div id="plantillas" class="section d-none">
-            <h1 class="text-center mb-4">Gestión de Plantillas</h1>
-            <div class="card mb-4">
-                <div class="card-body">
-                    <h3>Editar Mensajes Predeterminados</h3>
-                    <form id="messageForm">
-                        <div class="mb-3">
-                            <label for="welcomeMessage" class="form-label">Mensaje de Bienvenida</label>
-                            <textarea id="welcomeMessage" class="form-control" rows="2" placeholder="💬 ¡Hola! 😊 Gracias por tu interés..."></textarea>
-                        </div>
-                        <div class="mb-3">
-                            <label for="followUpMessage" class="form-label">Mensaje de Seguimiento</label>
-                            <textarea id="followUpMessage" class="form-control" rows="2" placeholder="💬 Queremos asegurarnos..."></textarea>
-                        </div>
-                        <div class="mb-3">
-                            <label for="closingMessage" class="form-label">Mensaje de Cierre</label>
-                            <textarea id="closingMessage" class="form-control" rows="2" placeholder="💬 ¡Muchas gracias por tu compra!..."></textarea>
-                        </div>
-                        <button type="button" class="btn btn-primary" onclick="saveMessages()">Guardar Mensajes</button>
-                    </form>
-                </div>
-            </div>
-            <div class="card">
-                <div class="card-body">
-                    <h3>Plantillas Guardadas</h3>
-                    <table class="table table-bordered">
-                        <thead>
-                            <tr>
-                                <th>Nombre</th>
-                                <th>Mensaje</th>
-                                <th>Acciones</th>
-                            </tr>
-                        </thead>
-                        <tbody id="plantillasTableBody"></tbody>
-                    </table>
-                </div>
-            </div>
+            <iframe src="plantillas.html" style="width: 100%; height: 100vh; border: none;"></iframe>
         </div>
 
         <div id="estadisticas" class="section d-none">
