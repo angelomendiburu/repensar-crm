@@ -47,6 +47,31 @@ button {
     text-align: center;
 }
 
+/* Estados de usuarios - versión actualizada */
+.estado-dot {
+    display: inline-block;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    transition: background-color 0.3s ease;
+}
+
+.estado-dot.inicio {
+    background-color: var(--color-primary); /* Azul verdoso */
+}
+
+.estado-dot.esperando-respuesta {
+    background-color: #FFA500; /* Naranja */
+}
+
+.estado-dot.finalizado {
+    background-color: #ff0000; /* Verde */
+}
+
+.estado-dot.cancelado {
+    background-color: #000000; /* negro */
+}
+
 /* Estilos para los controles CSV */
 .csv-controls {
     display: flex;
@@ -94,26 +119,6 @@ button {
 .btn-primary:hover {
     background-color: var(--color-secondary);
     border-color: var(--color-secondary);
-}
-
-/* Estados de usuarios */
-.estado {
-    display: inline-block;
-    width: 12px;
-    height: 12px;
-    border-radius: 50%;
-}
-
-.estado.inicio {
-    background-color: var(--color-primary); /* #00A19D */
-}
-
-.estado.esperando-respuesta {
-    background-color: var(--color-accent); /* #B5927B */
-}
-
-.estado.finalizado {
-    background-color: #ff4757;
 }
 
 /* Botón de tema */
@@ -240,39 +245,6 @@ body.dark-mode .form-control {
 body.dark-mode .btn-primary {
     background-color: var(--color-secondary);
     border-color: var(--color-secondary);
-}
-
-body.dark-mode .theme__icon {
-    background-color: #121212;
-}
-
-body.dark-mode .theme__icon > :nth-child(1) {
-    border-color: #121212;
-    background-color: rgb(245, 245, 247);
-}
-
-body.dark-mode .theme__icon > :nth-child(2) span {
-    background-color: rgb(245, 245, 247);
-}
-
-body.dark-mode .theme__icon > :nth-child(3) {
-    background-color: #121212;
-}
-
-/* Estilos para los mensajes con desvanecimiento */
-textarea {
-    position: relative;
-    font-family: inherit;
-}
-
-textarea::placeholder {
-    opacity: 0.5;
-    transition: opacity 0.3s ease;
-}
-
-textarea:focus::placeholder,
-textarea:not(:placeholder-shown)::placeholder {
-    opacity: 0;
 }
 
 /* Media queries para responsividad */
