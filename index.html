@@ -68,6 +68,26 @@
             <iframe src="plantillas.html" style="width: 100%; height: 100vh; border: none;"></iframe>
         </div>
 
+        <div id="registros" class="section d-none">
+            <h2 class="mb-4">Registros</h2>
+            <button class="btn btn-danger mb-3" onclick="clearRecords()">Limpiar Registros</button>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Nombre</th>
+                        <th>Nombre de la plantilla</th>
+                        <th>Mensaje predefinido</th>
+                        <th>Curso</th>
+                        <th>Estado</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody id="registrosTableBody">
+                    <!-- Las filas se llenarán dinámicamente desde JavaScript -->
+                </tbody>
+            </table>
+        </div>
+
         <div id="estadisticas" class="section d-none">
             <h1 class="text-center mb-4">Estadísticas</h1>
             <canvas id="statsChart" width="400" height="400"></canvas>
@@ -141,6 +161,31 @@
             </div>
         </div>
 
+        <div class="modal fade" id="editarModal" tabindex="-1" aria-labelledby="editarModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="editarModalLabel">Editar Registro</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="mb-3">
+                            <label for="estadoEditar" class="form-label">Estado</label>
+                            <select class="form-select" id="estadoEditar">
+                                <option value="en_espera">En espera</option>
+                                <option value="en_progreso">En progreso</option>
+                                <option value="terminado">Terminado</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                        <button type="button" class="btn btn-primary" id="guardarCambiosEditarRegistro">Guardar Cambios</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <button class="theme__icon" id="darkModeToggle">
             <div></div>
             <div>
@@ -161,5 +206,6 @@
     <script src="theme.js"></script>
     <script src="chart.js"></script>
     <script src="app.js"></script>
+    <script src="registros.js"></script>
 </body>
 </html>

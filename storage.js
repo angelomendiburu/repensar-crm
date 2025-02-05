@@ -25,7 +25,8 @@ function savePlantillasToStorage(plantillas) {
 }
 
 function getRegistrosFromStorage() {
-    return JSON.parse(localStorage.getItem('registros')) || [];
+    const registros = localStorage.getItem('registros');
+    return registros ? JSON.parse(registros) : [];
 }
 
 function saveRegistrosToStorage(registros) {

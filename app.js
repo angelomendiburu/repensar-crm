@@ -4,6 +4,7 @@ document.addEventListener('DOMContentLoaded', () => {
     applySavedTheme();
     setupNavigation();
     loadPlantillas(); // Cargar plantillas al inicializar la página
+    loadRegistros(); // Add this line to load registros.js
 });
 
 function setupEventListeners() {
@@ -204,3 +205,76 @@ function updateUserRow(user) {
         }
     });
 }
+
+function loadRegistros() {
+    const script = document.createElement('script');
+    script.src = 'registros.js';
+    document.body.appendChild(script);
+}
+
+// Additional functions for registros
+function generateRandomIdentifier(prefix = "") {
+    return `${prefix}_${Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15)}`;
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+    let registros = getRegistrosFromStorage();
+
+    function guardarDatos() {
+        saveRegistrosToStorage(registros);
+    }
+
+    function renderizarRegistros() {
+        const tbody = document.getElementById("registrosTableBody");
+        tbody.innerHTML = ""; 
+
+        if (!Array.isArray(registros) || registros.length === 0) {
+            tbody.innerHTML = `
+                <tr>
+                    <td colspan="6" class="text-center">No hay datos</td>
+                </tr>
+            `;
+            return;
+        }
+
+        registros.forEach(registro => {
+            const row = document.createElement("tr");
+            row.innerHTML = `
+                <td>${registro.nombre}</td>
+                <td>${registro.nombrePlantilla}</td>
+                <td>${registro.mensaje}</td>
+                <td>${registro.curso || "No especificado"}</td>
+                <td>${registro.estado || "No especificado"}</td>
+                <td>
+                    <button class="btn btn-warning btn-sm" data-bs-toggle="modal" data-bs-target="#editarModal" onclick="cargarDatosEditarRegistro('${registro.id}')">Editar Etiqueta</button>
+                </td>
+            `;
+            tbody.appendChild(row);
+        });
+    }
+
+    window.cargarDatosEditarRegistro = function(id) {
+        const registro = registros.find(r => r.id === id);
+        if (registro) {
+            document.getElementById("estadoEditar").value = registro.estado;
+
+            document.getElementById("guardarCambiosEditarRegistro").onclick = function() {
+                registro.estado = `${document.getElementById("estadoEditar").value}`;
+                guardarDatos();
+                renderizarRegistros();
+                bootstrap.Modal.getInstance(document.getElementById('editarModal')).hide();
+            };
+        }
+    };
+
+    window.renderizarRegistros = renderizarRegistros;
+    renderizarRegistros();
+
+    window.clearRecords = function() {
+        if (confirm('¿Estás seguro de que deseas eliminar todos los registros?')) {
+            registros = [];
+            guardarDatos();
+            renderizarRegistros();
+        }
+    };
+});

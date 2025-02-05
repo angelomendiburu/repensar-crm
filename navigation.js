@@ -24,6 +24,8 @@ function setupNavigation() {
                 loadStatsChart();
             } else if (section === 'plantillas') {
                 loadPlantillas();
+            } else if (section === 'registros') {
+                renderizarRegistros();
             }
         });
     });
@@ -41,7 +43,9 @@ window.cargarDatosEditarPlantilla = function(nombre) {
             plantilla.mensaje = document.getElementById("mensajePlantillaEditar").value;
             savePlantillasToStorage(plantillas);
             loadPlantillas();
-            loadStatsChart(); // Call loadStatsChart when data is updated
+            if (typeof loadStatsChart === 'function') {
+                loadStatsChart(); // Call loadStatsChart when data is updated
+            }
         };
     }
 };
@@ -50,4 +54,6 @@ window.cargarDatosEditarPlantilla = function(nombre) {
 // import { loadStatsChart } from './chart.js';
 
 // Ensure loadStatsChart is available globally
-window.loadStatsChart = loadStatsChart;
+window.loadStatsChart = window.loadStatsChart || function() {
+    console.error('loadStatsChart is not defined');
+};

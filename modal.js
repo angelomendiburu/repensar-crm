@@ -4,9 +4,9 @@ function showMessageOptions(whatsapp) {
     const messages = getMessagesFromLocalStorage();
 
     templateList.innerHTML = `
-        <button class="btn btn-success" onclick="sendMessage('${whatsapp}', '${messages.welcome}')">Bienvenida</button>
-        <button class="btn btn-warning" style="background-color: var(--color-accent);" onclick="sendMessage('${whatsapp}', '${messages.followUp}')">Seguimiento</button>
-        <button class="btn btn-danger" onclick="sendMessage('${whatsapp}', '${messages.closing}')">Cierre</button>
+        <button class="btn btn-success" onclick="sendMessage('${whatsapp}', '${messages.welcome}', 'Bienvenida')">Bienvenida</button>
+        <button class="btn btn-warning" style="background-color: var(--color-accent);" onclick="sendMessage('${whatsapp}', '${messages.followUp}', 'Seguimiento')">Seguimiento</button>
+        <button class="btn btn-danger" onclick="sendMessage('${whatsapp}', '${messages.closing}', 'Cierre')">Cierre</button>
     `;
 
     templateModal.show();
@@ -48,9 +48,30 @@ function updateUserRow(user) {
     });
 }
 
-function sendMessage(whatsapp, message) {
+function sendMessage(whatsapp, message, templateName) {
     const url = `https://api.whatsapp.com/send?phone=${whatsapp}&text=${encodeURIComponent(message)}`;
     window.open(url, '_blank');
+
+    // Generate a new record
+    const users = getUsersFromLocalStorage();
+    const user = users.find(u => u.whatsapp === whatsapp);
+    if (user) {
+        let registros = getRegistrosFromStorage();
+        if (!Array.isArray(registros)) {
+            registros = [];
+        }
+        const newRecord = {
+            id: generateRandomIdentifier("req"),
+            nombre: `${user.nombre} ${user.apellido}`, // Use full name
+            nombrePlantilla: templateName,
+            mensaje: message, // Use the correct message
+            curso: user.curso || "No especificado",
+            estado: "Inicio"
+        };
+        registros.push(newRecord);
+        saveRegistrosToStorage(registros);
+        renderizarRegistros(); // Update records in real-time
+    }
 }
 
 // Export functions if using modules
